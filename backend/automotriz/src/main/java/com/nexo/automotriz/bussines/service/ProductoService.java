@@ -1,6 +1,7 @@
 package com.nexo.automotriz.bussines.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,18 @@ public class ProductoService implements IProductoRepository{
 	public void delete(Long id) {
 		
 		productoDao.deleteById(id);
+	}
+
+
+	@Override
+	public Optional<Producto> findByid(Long id) {
+		return productoDao.findById(id);
+	}
+
+	@Override
+	public Optional<List<Producto>> findByFechaIngresoOrNombreOrUsuario(String nombreProducto,
+			String nombreUsuario,String fechaIngreso) {
+		return productoDao.findByFechaIngresoOrNombreOrUsuario(nombreProducto, nombreUsuario,fechaIngreso);
 	}
 
 	

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nexo.automotriz.bussines.service.ProductoService;
@@ -26,6 +27,32 @@ public class ProductoController {
 	@GetMapping("/all")
 	private ResponseEntity<List<Producto>> getAll(){
 		return new ResponseEntity<List<Producto>>(productoService.getAll(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	private ResponseEntity<Producto> getProductoById(@PathVariable Long id){
+		return productoService.findByid(id)
+				.map(producto -> new ResponseEntity<>(producto, HttpStatus.OK))
+				.orElse(new  ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
+	
+	@GetMapping("/filter")
+	private ResponseEntity<List<Producto>> getFilter(@RequestParam(name="fecha") String fecha, 
+			@RequestParam(name = "nombre") String nombre, 
+			@RequestParam(name = "usuario") String usuario){
+		
+		if(fecha == null) {
+			fecha = "";
+		}
+		if(nombre == null) {
+			nombre = "";
+		}
+		if(usuario == null) {
+			usuario = "";
+		}
+		return productoService.findByFechaIngresoOrNombreOrUsuario(nombre.toUpperCase(), usuario,fecha)
+				.map(productos -> new ResponseEntity<>(productos, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 	
 	@PostMapping("/save")

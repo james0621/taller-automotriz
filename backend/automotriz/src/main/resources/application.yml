@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: dev
+  jackson:
+    time-zone: America/Bogota
+      
 server:
   servlet:
     context-path: /automotriz/api
